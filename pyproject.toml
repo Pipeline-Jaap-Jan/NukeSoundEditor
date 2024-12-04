@@ -5,7 +5,9 @@ description = "Add your description here"
 authors = [
     { name = "Jaap-Jan", email = "jaap-jan.vandegeest@student.ahk.nl" }
 ]
-dependencies = []
+dependencies = [
+    "pyside2>=5.15.2.1",
+]
 readme = "README.md"
 requires-python = ">= 3.8"
 
