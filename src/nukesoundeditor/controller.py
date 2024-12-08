@@ -13,6 +13,7 @@ class SoundEditorController:
         self._connect_interface()
         self._checkbox_connect()
         self._nuke_setting_sound()
+        self._save_button_connect()
 
     def open_interface(self):
         self._view.show()
@@ -46,7 +47,11 @@ class SoundEditorController:
         else:
             self._view.selection_status.setText("RenderSound is disabled")
 
+    def _save_button_connect(self):
+        self._view.save_button.triggered.connect(self.exit_app)
 
+    def exit_app(self):
+        self.close()
 
 
 
