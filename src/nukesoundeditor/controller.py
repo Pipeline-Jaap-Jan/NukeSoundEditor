@@ -1,13 +1,16 @@
 from nukesoundeditor.view import SoundEditorView
-import sys
-from PySide2.QtWidgets import QApplication, QFileDialog
+from nukesoundeditor.model import SoundEditorModel
+#import sys
+from PySide2.QtWidgets import QFileDialog
+import nuke
 
 
 class SoundEditorController:
     def __init__(self):
         self._view = SoundEditorView()
-
+        self._model = SoundEditorModel()
         self._connect_interface()
+        self._nuke_setting_sound()
 
     def open_interface(self):
         self._view.show()
@@ -17,19 +20,25 @@ class SoundEditorController:
         select_sound_file_dialog.setNameFilter("select file (*.mp3 *.wav)")
         select_sound_file_dialog.exec_()
         if not select_sound_file_dialog.selectedFiles():
-            print("You did not select a file")
+            self._view.selection_status.setText("You did not select a file")
             return
         
-        output = select_sound_file_dialog.selectedFiles()[0]
-        #renderSound(output)
+        self.output = select_sound_file_dialog.selectedFiles()[0]
+        self._model._settings(self.output)
         self._view.selection_status.setText("Sound has been selected")
+        self.path = self._model.mysettings.value("lineEdit")
 
     def _connect_interface(self):
         self._view.selection_button.clicked.connect(self._select_sound_file)
 
-myapp = QApplication(sys.argv)
+    def _nuke_setting_sound(self):
+        nuke.addAfterRender(self._model.render_sound)
 
-#sys.exit()
+
+
+
+#myapp = QApplication(sys.argv)
+
 window = SoundEditorController()
 window.open_interface()
-myapp.exec_()
+#myapp.exec_()
