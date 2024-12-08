@@ -34,3 +34,4 @@ class SoundEditorView(QWidget):
 
 
 
+

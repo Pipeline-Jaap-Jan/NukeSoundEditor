@@ -1,10 +1,5 @@
 from nukesoundeditor.controller import SoundEditorController
-#import nukesoundeditor
-
 import nuke
-
-play = SoundEditorController()
-play._nuke_setting_sound()
 
 def create_nse_menu() -> None:
     """NSE stands for Nuke Sound Editor"""
@@ -13,17 +8,22 @@ def create_nse_menu() -> None:
 
     nse_menu.addCommand(
         "Settings",
-        "global nuke_sound_editor;nukesoundeditor.controller()",
+        "start_nse_editor()",
         "",
     )
 
-create_nse_menu()
 
 
 def start_nse_editor() -> None:
     """Starts background processes for the Node Mailer."""
     global nuke_sound_editor
-    nuke_sound_editor = nukesoundeditor.controller()
+    nuke_sound_editor = SoundEditorController()
+    nuke_sound_editor.open_interface()
+    nuke_sound_editor._nuke_setting_sound()
 
-#start_nse_editor()
+play = SoundEditorController()
+play._nuke_setting_sound()
+
+create_nse_menu()
+
 
