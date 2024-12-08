@@ -11,6 +11,7 @@ class SoundEditorController:
         self._view = SoundEditorView()
         self._model = SoundEditorModel()
         self._connect_interface()
+        self._checkbox_connect()
         self._nuke_setting_sound()
 
     def open_interface(self):
