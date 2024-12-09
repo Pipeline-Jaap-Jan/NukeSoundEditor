@@ -14,6 +14,7 @@ class SoundEditorController:
         self._checkbox_connect()
         self._nuke_setting_sound()
         self._save_button_connect()
+        self._standard_checking()
 
     def open_interface(self):
         self._view.show()
@@ -27,15 +28,19 @@ class SoundEditorController:
             return
         
         self.output = select_sound_file_dialog.selectedFiles()[0]
-        self._model._settings(self.output)
+        self._model._set_sound_file_path(self.output)
         self._view.selection_status.setText("Sound has been selected")
-        self.path = self._model.mysettings.value("lineEdit")
+        #self.path = self._model.mysettings.value("lineEdit")
 
     def _connect_interface(self):
         self._view.selection_button.clicked.connect(self._select_sound_file)
 
     def _nuke_setting_sound(self):
-        nuke.addAfterRender(self._model.render_sound)
+        if self._model._is_render_sound_enabled():
+            nuke.addAfterRender(self._model.render_sound)
+
+        else:
+            return
 
     def _checkbox_connect(self):
         self._view.check.stateChanged.connect(self._checkbox_change)
@@ -43,15 +48,20 @@ class SoundEditorController:
     def _checkbox_change(self, state):
         if state == Qt.Checked:
             self._view.selection_status.setText("RenderSound is enabled")
-
+            self._model._set_render_sound_enabled(True)
         else:
             self._view.selection_status.setText("RenderSound is disabled")
+            self._model._set_render_sound_enabled(False)
+
 
     def _save_button_connect(self):
-        self._view.save_button.triggered.connect(self.exit_app)
+        self._view.save_button.clicked.connect(self.exit_app)
 
     def exit_app(self):
-        self.close()
+        self._view.close()
+
+    def _standard_checking(self):
+        self._view.check.setChecked(self._model._is_render_sound_enabled())
 
 
 
