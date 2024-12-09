@@ -13,7 +13,7 @@ class SoundEditorModel:
             self.mysettings.setValue("enable", "True")
 
     def render_sound(self):
-        if not self._is_render_sound_enabled:
+        if not self._is_render_sound_enabled():
             return
         
         self.player = QMediaPlayer()

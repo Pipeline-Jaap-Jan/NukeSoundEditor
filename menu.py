@@ -25,5 +25,3 @@ play = SoundEditorController()
 play._nuke_setting_sound()
 
 create_nse_menu()
-
-
