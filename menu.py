@@ -15,7 +15,6 @@ def create_nse_menu() -> None:
 
 
 def start_nse_editor() -> None:
-    """Starts background processes for the Node Mailer."""
     global nuke_sound_editor
     nuke_sound_editor = SoundEditorController()
     nuke_sound_editor.open_interface()
