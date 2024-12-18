@@ -1,6 +1,5 @@
 from nukesoundeditor.view import SoundEditorView
-from nukesoundeditor.model import SoundEditorModel
-#import sys
+from nukesoundeditor import model
 from PySide2.QtWidgets import QFileDialog
 from PySide2.QtCore import Qt
 import nuke
@@ -9,10 +8,9 @@ import nuke
 class SoundEditorController:
     def __init__(self):
         self._view = SoundEditorView()
-        self._model = SoundEditorModel()
         self._connect_interface()
         self._checkbox_connect()
-        self._nuke_setting_sound()
+        self.nuke_setting_sound()
         self._save_button_connect()
         self._standard_checking()
 
@@ -28,19 +26,15 @@ class SoundEditorController:
             return
         
         self.output = select_sound_file_dialog.selectedFiles()[0]
-        self._model._set_sound_file_path(self.output)
+        model.set_sound_file_path(self.output)
         self._view.selection_status.setText("Sound has been selected")
-        #self.path = self._model.mysettings.value("lineEdit")
 
     def _connect_interface(self):
         self._view.selection_button.clicked.connect(self._select_sound_file)
 
-    def _nuke_setting_sound(self):
-        if self._model._is_render_sound_enabled():
-            nuke.addAfterRender(self._model.render_sound)
-
-        else:
-            return
+    def nuke_setting_sound(self):
+        if model.is_render_sound_enabled():
+            nuke.addAfterRender(model.render_sound)
 
     def _checkbox_connect(self):
         self._view.check.stateChanged.connect(self._checkbox_change)
@@ -48,10 +42,10 @@ class SoundEditorController:
     def _checkbox_change(self, state):
         if state == Qt.Checked:
             self._view.selection_status.setText("RenderSound is enabled")
-            self._model._set_render_sound_enabled(True)
+            model.set_render_sound_enabled(True)
         else:
             self._view.selection_status.setText("RenderSound is disabled")
-            self._model._set_render_sound_enabled(False)
+            model.set_render_sound_enabled(False)
 
 
     def _save_button_connect(self):
@@ -61,12 +55,10 @@ class SoundEditorController:
         self._view.close()
 
     def _standard_checking(self):
-        self._view.check.setChecked(self._model._is_render_sound_enabled())
+        self._view.check.setChecked(model.is_render_sound_enabled())
 
-
-
-#myapp = QApplication(sys.argv)
-
-#window = SoundEditorController()
-#window.open_interface()
-#myapp.exec_()
+    def _slider_control(self):
+        value = model.render_sound(100)
+        self._view._volume_bar(value)
+        self._view.slider.setSliderPosition(int(value))
+        self._view.slider.valueChanged.connect(self._view.changedValue)

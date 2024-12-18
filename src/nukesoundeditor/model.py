@@ -1,33 +1,34 @@
 from PySide2.QtMultimedia import QMediaPlayer, QMediaContent
 from PySide2.QtCore import QUrl, QSettings
 
-class SoundEditorModel:
-    def __init__(self):
-        self._initialize_settings()
+audio_player = QMediaPlayer()
 
-    def _initialize_settings(self, path=None):
-        self.mysettings = QSettings("MyCompany", "MyApp")
-        if not self.mysettings.contains("lineEdit"):
-            self.mysettings.setValue("lineEdit", "C:/pipeline/nuke/NukeRenderSound/rnd_okay.wav")
-        if not self.mysettings.contains("enable"):
-            self.mysettings.setValue("enable", "True")
+def render_sound():
+    if not is_render_sound_enabled():
+        return
+    
+    audio_player.setMedia(QMediaContent(QUrl.fromLocalFile(QSettings.value("NukeRenderSounde/AudioFile"))))
+    audio_player.setVolume(100) #TODO: volume bar
+    audio_player.play()
+    #global _player
+    #_player = player
 
-    def render_sound(self):
-        if not self._is_render_sound_enabled():
-            return
-        
-        self.player = QMediaPlayer()
-        self.player.setMedia(QMediaContent(QUrl.fromLocalFile(self.mysettings.value("lineEdit"))))
-        self.player.setVolume(100) #TODO: volume bar
-        self.player.play()
-        global _player
-        _player = self.player
+def initialize_settings(path=None):
+    settings = QSettings()
+    if not settings.contains("NukeRenderSounde/AudioFile"):
+        settings.setValue("NukeRenderSounde/AudioFile", "C:/pipeline/nuke/NukeRenderSound/rnd_okay.wav")
+    if not settings.contains("NukeRenderSounde/AudioFile/Enabled"):
+        settings.setValue("NukeRenderSounde/AudioFile/Enabled", "True")
 
-    def _set_sound_file_path(self, path):
-        self.mysettings.setValue("lineEdit", path)
 
-    def _is_render_sound_enabled(self):
-        return self.mysettings.value("enable") == "True"
+def set_sound_file_path(path):
+    QSettings().setValue("NukeRenderSounde/AudioFile", path)
 
-    def _set_render_sound_enabled(self, enable):
-        self.mysettings.setValue("enable", "True" if enable else "False")
+def is_render_sound_enabled():
+    return QSettings.value("NukeRenderSounde/AudioFile/Enabled") == "True"
+
+def set_render_sound_enabled(enabled):
+    QSettings().setValue("NukeRenderSounde/AudioFile/Enabled", "True" if enabled else "False")
+
+def sound_volume(value):
+    audio_player.setVolume(int(value))
