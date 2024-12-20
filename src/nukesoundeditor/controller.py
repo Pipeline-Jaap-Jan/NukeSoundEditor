@@ -1,7 +1,7 @@
 from nukesoundeditor.view import SoundEditorView
 from nukesoundeditor import model
 from PySide2.QtWidgets import QFileDialog
-from PySide2.QtCore import Qt
+from PySide2.QtCore import Qt, QSettings
 import nuke
 
 
@@ -59,12 +59,8 @@ class SoundEditorController:
         self._view.check.setChecked(model.is_render_sound_enabled())
 
     def _slider_control(self):
-        value = self._view.slider.value()
-        self._view.slider.sliderReleased.connect(model.set_render_sound_volume(value))
-        self._view.slider.sliderReleased.connect(model.render_sound)
-        self._view.slider.sliderReleased.connect(print(model.render_sound_value()))
-        #self._view._volume_bar(model.render_sound_value)
-        self._view.slider.setSliderPosition(int(100))
         self._view.slider.valueChanged.connect(self._view.changed_value)
-
+        self._view.slider.setSliderPosition(int(QSettings().value("NukeRenderSound/AudioFile/Volume")))
+        self._view.slider.valueChanged.connect(model.set_render_sound_volume)
+        self._view.slider.sliderReleased.connect(model.render_sound)
 
