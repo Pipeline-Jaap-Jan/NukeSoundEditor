@@ -7,28 +7,33 @@ def render_sound():
     if not is_render_sound_enabled():
         return
     
-    audio_player.setMedia(QMediaContent(QUrl.fromLocalFile(QSettings.value("NukeRenderSounde/AudioFile"))))
-    audio_player.setVolume(100) #TODO: volume bar
+    audio_player.setMedia(QMediaContent(QUrl.fromLocalFile(QSettings().value("NukeRenderSound/AudioFile"))))
+    audio_player.setVolume(int(QSettings().value("NukeRenderSound/AudioFile/Volume"))) #TODO: volume bar
     audio_player.play()
     #global _player
-    #_player = player
+    #_player = audio_player
 
 def initialize_settings(path=None):
     settings = QSettings()
-    if not settings.contains("NukeRenderSounde/AudioFile"):
-        settings.setValue("NukeRenderSounde/AudioFile", "C:/pipeline/nuke/NukeRenderSound/rnd_okay.wav")
-    if not settings.contains("NukeRenderSounde/AudioFile/Enabled"):
-        settings.setValue("NukeRenderSounde/AudioFile/Enabled", "True")
+    if not settings.contains("NukeRenderSound/AudioFile"):
+        settings.setValue("NukeRenderSound/AudioFile", "C:/pipeline/nuke/NukeRenderSound/rnd_okay.wav")
+    if not settings.contains("NukeRenderSound/AudioFile/Enabled"):
+        settings.setValue("NukeRenderSound/AudioFile/Enabled", "True")
+    if not settings.contains("NukeRenderSound/AudioFile/Volume"):
+        settings.setValue("NukeRenderSound/AudioFile/Volume", int(100))
 
 
 def set_sound_file_path(path):
-    QSettings().setValue("NukeRenderSounde/AudioFile", path)
+    QSettings().setValue("NukeRenderSound/AudioFile", path)
 
 def is_render_sound_enabled():
-    return QSettings.value("NukeRenderSounde/AudioFile/Enabled") == "True"
+    return QSettings().value("NukeRenderSound/AudioFile/Enabled") == "True"
 
 def set_render_sound_enabled(enabled):
-    QSettings().setValue("NukeRenderSounde/AudioFile/Enabled", "True" if enabled else "False")
+    QSettings().setValue("NukeRenderSound/AudioFile/Enabled", "True" if enabled else "False")
 
-def sound_volume(value):
-    audio_player.setVolume(int(value))
+def set_render_sound_volume(volume):
+    QSettings().setValue("NukeRenderSound/AudioFile/Volume", int(volume))
+
+def render_sound_value():
+    return QSettings().value("NukeRenderSound/AudioFile/Volume")

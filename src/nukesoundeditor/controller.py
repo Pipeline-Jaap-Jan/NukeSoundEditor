@@ -13,6 +13,7 @@ class SoundEditorController:
         self.nuke_setting_sound()
         self._save_button_connect()
         self._standard_checking()
+        self._slider_control()
 
     def open_interface(self):
         self._view.show()
@@ -58,7 +59,12 @@ class SoundEditorController:
         self._view.check.setChecked(model.is_render_sound_enabled())
 
     def _slider_control(self):
-        value = model.render_sound(100)
-        self._view._volume_bar(value)
-        self._view.slider.setSliderPosition(int(value))
-        self._view.slider.valueChanged.connect(self._view.changedValue)
+        value = self._view.slider.value()
+        self._view.slider.sliderReleased.connect(model.set_render_sound_volume(value))
+        self._view.slider.sliderReleased.connect(model.render_sound)
+        self._view.slider.sliderReleased.connect(print(model.render_sound_value()))
+        #self._view._volume_bar(model.render_sound_value)
+        self._view.slider.setSliderPosition(int(100))
+        self._view.slider.valueChanged.connect(self._view.changed_value)
+
+

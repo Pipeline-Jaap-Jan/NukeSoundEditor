@@ -2,7 +2,7 @@ from PySide2.QtWidgets import QWidget, QPushButton, QVBoxLayout, QLabel, QCheckB
 from PySide2.QtCore import Qt
 
 class SoundEditorView(QWidget):
-    def __init__(self):
+    def __init__(self, ):
         super().__init__()
 
         self.setWindowTitle("Settings")
@@ -35,22 +35,16 @@ class SoundEditorView(QWidget):
     def _create_save_button(self):
         self.save_button = QPushButton("Save and Quit", self)
 
-    def _volume_bar(self, value):
+    def _volume_bar(self):
         self.slider = QSlider()
         self.slider.setOrientation(Qt.Horizontal)
         self.slider.setTickPosition(QSlider.TicksBelow)
         self.slider.setTickInterval(10)
         self.slider.setMinimum(0)
         self.slider.setMaximum(100)
-        self.select_sound_file_dialog = QLabel(str(value))
+        self.select_sound_file_dialog = QLabel(str(100))
 
-    def changedValue(self):
+    def changed_value(self):
         size = self.slider.value()
         self.select_sound_file_dialog.setText(str(size))
-
-
-
-
-
-
 
