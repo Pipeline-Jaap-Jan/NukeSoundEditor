@@ -32,3 +32,5 @@ def set_render_sound_enabled(enabled):
 
 def set_render_sound_volume(volume):
     QSettings().setValue("NukeRenderSound/AudioFile/Volume", volume)
+
+initialize_settings()
