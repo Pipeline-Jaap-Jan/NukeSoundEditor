@@ -13,7 +13,7 @@ Now whenever you render a shot. You will be notified with a sound that it has fi
 ---
 ### :hammer_and_wrench: Installation instructions
 
-- Move the CompCat folder into your .nuke installation folder.
+- Move the nukesoundeditor folder into your .nuke installation folder.
 - Copy the contents of the provided menu.py file to your existing menu.py file. 
 - If you do not have a menu.py file use the file provided in the zip.
 
